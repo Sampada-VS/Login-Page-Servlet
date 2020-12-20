@@ -15,7 +15,6 @@ import javax.servlet.annotation.WebInitParam;
 		description="Login Servlet Testing",
 		urlPatterns= {"/LoginController"},
 		initParams= {
-				@WebInitParam(name="user",value="Sampada"),
 				@WebInitParam(name="password",value="hello")
 		}
 )
@@ -23,19 +22,19 @@ import javax.servlet.annotation.WebInitParam;
 public class LoginController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String un = request.getParameter("userName");
-        String pw = request.getParameter("userPassword");
+		String pw = request.getParameter("userPassword");
 		
-		String userID=getServletConfig().getInitParameter("user");
+		String nameRegex="^[A-Z][a-z]{2,}$";
 		String password=getServletConfig().getInitParameter("password");
-
-        if (un.equals(userID) && pw.equals(password)) {
-        	request.setAttribute("user", un);
+		
+		if (un.matches(nameRegex) && pw.equals(password)) {
+			request.setAttribute("user", un);
 			request.getRequestDispatcher("LoginSuccess.jsp").forward(request, response);
-        } else {
-        	RequestDispatcher rd=getServletContext().getRequestDispatcher("/login.html");
+		} else {
+			RequestDispatcher rd=getServletContext().getRequestDispatcher("/login.html");
 			PrintWriter out=response.getWriter();
 			out.println("<font color=red>Either username or password is wrong.</font>");
-			rd.include(request, response);
+						rd.include(request, response);
         }
 	}
 }
